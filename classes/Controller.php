@@ -29,116 +29,129 @@ class Controller
     public function run()
     {
         switch ($this->command) {
-            case "insert":
-                $this->insert();
+            case "home":
+                $this->home();
                 break;
-            case "run":
-                $this->start();
+            case "search_results":
+                $this->search_results();
                 break;
-            case "add":
-                $this->add();
+            case "class_reviews":
+                $this->class_reviews();
                 break;
-            case "delete":
-                $this->delete();
+            case "my_reviews":
+                $this->my_reviews();
                 break;
-            case "update":
-                $this->update1();
-                break;
-            case "update_final":
-                $this->update2();
+            case "add_reviews":
+                $this->add_review();
                 break;
             default:
-                $this->insert();
+                $this->home();
                 break;
         }
     }
-    public function delete()
+    public function home()
     {
-        $delete_id = $_POST['delete_id'];
-        $pieces = explode("|", $delete_id);
-        $name = $pieces[0];
-        $major = $pieces[1];
-        $year = $pieces[2];
-
-
-        $sql = "DELETE FROM friends WHERE Name ='$name' AND Major='$major' AND Year=$year;";
-
-        if ($this->conn->query($sql) === TRUE) {
-            echo "Row deleted successfully";
-        } else {
-            echo "Error deleting row: " . $this->conn->error;
-        }
-        $this->start();
+        include "templates/home.php";
     }
-    public function update1()
+    public function search_results()
     {
-        $update_id = $_POST['update_id'];
-
-        $_SESSION["update_id"] = $update_id;
-        include "templates/update.php";
     }
-    public function update2()
+    public function class_reviews()
     {
-        $pieces = explode("|", $_SESSION["update_id"]);
-        $pieces0 = $pieces[0];
-        $pieces1 = $pieces[1];
-        $pieces2 = $pieces[2];
-        $new_name =  $_POST["name"];
-        $new_major =  $_POST["major"];
-        $new_year =  $_POST["year"];
-        $sql = "UPDATE friends SET Name='$new_name', Major='$new_major', Year=$new_year WHERE Name ='$pieces0' AND Major='$pieces1' AND Year=$pieces2;";
-
-        if ($this->conn->query($sql) === TRUE) {
-            echo "Row updated successfully";
-        } else {
-            echo "Error updating row: " . $this->conn->error;
-        }
-        $this->start();
     }
-
-    public function insert()
+    public function my_reviews()
     {
-        // Create connection
-        $this->conn = mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
-
-        // Check connection
-        if (!$this->conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        $sql = "INSERT INTO friends (name, major, year) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($this->conn, $sql);
-
-        // Step 3: Bind the values for the statement
-        $name =  $_POST["name"];
-        $major =  $_POST["major"];
-        $year =  $_POST["year"];
-        mysqli_stmt_bind_param($stmt, "ssi", $name, $major, $year);
-
-        // Step 4: Execute the statement
-        if (mysqli_stmt_execute($stmt)) {
-            echo "New record created successfully";
-        } else {
-            echo "Error: " . mysqli_error($this->conn);
-        }
-
-        // Close the statement and connection
-        mysqli_stmt_close($stmt);
-        // mysqli_close($this->conn);
-        $this->start();
     }
-
-    public function start()
+    public function add_review()
     {
-        $result = mysqli_query($this->conn, "SELECT * FROM friends");
-        $this->friends = array();
+    }
+    // public function delete()
+    // {
+    //     $delete_id = $_POST['delete_id'];
+    //     $pieces = explode("|", $delete_id);
+    //     $name = $pieces[0];
+    //     $major = $pieces[1];
+    //     $year = $pieces[2];
 
-        while ($row = mysqli_fetch_assoc($result)) {
-            $this->friends[] = $row;
-        }
-        include "templates/view_table.php";
-    }
-    public function add()
-    {
-        include "templates/add.php";
-    }
+
+    //     $sql = "DELETE FROM friends WHERE Name ='$name' AND Major='$major' AND Year=$year;";
+
+    //     if ($this->conn->query($sql) === TRUE) {
+    //         echo "Row deleted successfully";
+    //     } else {
+    //         echo "Error deleting row: " . $this->conn->error;
+    //     }
+    //     $this->start();
+    // }
+    // public function update1()
+    // {
+    //     $update_id = $_POST['update_id'];
+
+    //     $_SESSION["update_id"] = $update_id;
+    //     include "templates/update.php";
+    // }
+    // public function update2()
+    // {
+    //     $pieces = explode("|", $_SESSION["update_id"]);
+    //     $pieces0 = $pieces[0];
+    //     $pieces1 = $pieces[1];
+    //     $pieces2 = $pieces[2];
+    //     $new_name =  $_POST["name"];
+    //     $new_major =  $_POST["major"];
+    //     $new_year =  $_POST["year"];
+    //     $sql = "UPDATE friends SET Name='$new_name', Major='$new_major', Year=$new_year WHERE Name ='$pieces0' AND Major='$pieces1' AND Year=$pieces2;";
+
+    //     if ($this->conn->query($sql) === TRUE) {
+    //         echo "Row updated successfully";
+    //     } else {
+    //         echo "Error updating row: " . $this->conn->error;
+    //     }
+    //     $this->start();
+    // }
+
+    // public function insert()
+    // {
+    //     // Create connection
+    //     $this->conn = mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
+
+    //     // Check connection
+    //     if (!$this->conn) {
+    //         die("Connection failed: " . mysqli_connect_error());
+    //     }
+    //     $sql = "INSERT INTO friends (name, major, year) VALUES (?, ?, ?)";
+    //     $stmt = mysqli_prepare($this->conn, $sql);
+
+    //     // Step 3: Bind the values for the statement
+    //     $name =  $_POST["name"];
+    //     $major =  $_POST["major"];
+    //     $year =  $_POST["year"];
+    //     mysqli_stmt_bind_param($stmt, "ssi", $name, $major, $year);
+
+    //     // Step 4: Execute the statement
+    //     if (mysqli_stmt_execute($stmt)) {
+    //         echo "New record created successfully";
+    //     } else {
+    //         echo "Error: " . mysqli_error($this->conn);
+    //     }
+
+    //     // Close the statement and connection
+    //     mysqli_stmt_close($stmt);
+    //     // mysqli_close($this->conn);
+    //     $this->start();
+    // }
+
+    // public function start()
+    // {
+    //     $result = mysqli_query($this->conn, "SELECT * FROM friends");
+    //     $this->friends = array();
+
+    //     while ($row = mysqli_fetch_assoc($result)) {
+    //         $this->friends[] = $row;
+    //     }
+    //     include "templates/view_table.php";
+    // }
+    // public function add()
+    // {
+    //     include "templates/add.php";
+    // }
 }
