@@ -41,7 +41,7 @@ class Controller
             case "my_reviews":
                 $this->my_reviews();
                 break;
-            case "add_reviews":
+            case "add_review":
                 $this->add_review();
                 break;
             default:
@@ -51,7 +51,7 @@ class Controller
     }
     public function home()
     {
-        include "templates/home.php";
+        include "templates/results.php";
     }
     public function search_results()
     {
@@ -65,6 +65,7 @@ class Controller
     }
     public function add_review()
     {
+        include "templates/add_review.php";
     }
     // public function delete()
     // {
