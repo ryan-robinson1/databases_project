@@ -55,6 +55,7 @@ class Controller
     }
     public function search_results()
     {
+        include "templates/results.php";
     }
     public function class_reviews()
     {
