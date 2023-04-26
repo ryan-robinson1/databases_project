@@ -61,7 +61,7 @@ CREATE TABLE ClassRequirement (
 
 CREATE TABLE Review (
   reviewID INT PRIMARY KEY AUTO_INCREMENT,
-  rating DECIMAL(3,2) CHECK (rating <= 10 AND rating >= 1),
+  rating DECIMAL(3,2) CHECK (rating <= 5 AND rating >= 1),
   reviewDescription TEXT,
   reviewTerm TEXT,
   reviewDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP

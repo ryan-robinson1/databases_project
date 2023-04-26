@@ -127,6 +127,16 @@ class Controller
     }
     public function add_review()
     {
+        $_classID = $_POST['classid'];
+        $sql = "SELECT name FROM classidentity where classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+        $class_name = $arr[0]['name'];
+
+        $sql = "SELECT prof_name FROM professor NATURAL JOIN taughtby where classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+
+        $prof_name = $arr[0]['prof_name'];
+
         include "templates/add_review.php";
     }
     function runSafeSQL($conn, $sql, $paramTypes, ...$params)

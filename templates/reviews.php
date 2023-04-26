@@ -41,7 +41,10 @@
           <b>Prerequisite: </b><?= $requirement ?>
         <?php endif; ?>
         <hr>
-        <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+        <form action="?command=add_review" method="post">
+          <input type="hidden" name="classid" value='<?= $_classID ?>'>
+          <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+        </form>
         <?php
         if (count($rating) > 0) {
           for ($i = 0; $i < count($rating); $i++) {
