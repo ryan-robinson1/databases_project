@@ -42,21 +42,44 @@
         <?php endif; ?>
         <hr>
         <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Term (i.e. Spring 2023)</h5>
-            <p class="card-text">Review content goes here.</p>
-            <p class="card-text">Submitted by: <a href="#">Username</a></p>
+        <?php
+        if (count($rating) > 0) {
+          for ($i = 0; $i < count($rating); $i++) {
+        ?>
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-8">
+                    <h5 class="card-title"><?= $reviewTerm[$i] ?></h5>
+                    <p class="card-text" style="font-size: 1.1rem;"><?= $reviewDescription[$i] ?></p>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="card-text">Difficulty: <small class="text-muted"><?= $difficulty[$i] ?></small></p>
+                        <p class="card-text">Hours Outside: <small class="text-muted"><?= $hoursOutside[$i] ?></small></p>
+                        <p class="card-text">Rating: <small class="text-muted"><?= $rating[$i] ?></small></p>
+                        <p class="card-text">Review Date: <small class="text-muted"><?= $reviewDate[$i] ?></small></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <?php
+          }
+        } else {
+          ?>
+          <div class="card">
+            <div class="card-body text-center">
+              <h5 class="card-title">No Reviews</h5>
+              <p class="card-text">You can help us by writing a review!</p>
+            </div>
           </div>
-        </div>
-        <div class="card mt-3">
-          <div class="card-body">
-            <h5 class="card-title">Class/Professor Name</h5>
-            <p class="card-text">Review content goes here.</p>
-            <p class="card-text">Submitted by: <a href="#">Username</a></p>
-          </div>
-        </div>
-        <!-- more reviews go here -->
+        <?php
+        }
+        ?>
       </div>
     </div>
   </div>

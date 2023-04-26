@@ -63,6 +63,7 @@ CREATE TABLE Review (
   reviewID INT PRIMARY KEY AUTO_INCREMENT,
   rating DECIMAL(3,2) CHECK (rating <= 10 AND rating >= 1),
   reviewDescription TEXT,
+  reviewTerm TEXT,
   reviewDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -91,13 +92,13 @@ VALUES ('user1', 'John Smith', 'john.smith@example.com', 'http://example.com/pro
        ('user3', 'David Lee', 'david.lee@example.com', 'http://example.com/profilepic/user3');
 
 -- Insert dummy data into Review table
-INSERT INTO Review (reviewID, rating, reviewDescription, reviewDate)
-VALUES (1, 4.5, 'Great prof, highly recommend!', '2022-01-01'),
-       (2, 3.0, 'Not bad, but could be better', '2022-01-02'),
-       (3, 2.5, 'Would not recommend this prof', '2022-01-03'),
-       (4, 4.0, 'Interesting class, learned a lot', '2022-01-04'),
-       (5, 3.5, 'Decent class, nothing special', '2022-01-05'),
-       (6, 2.0, 'Terrible class, avoid if possible', '2022-01-06');
+INSERT INTO Review (reviewID, rating, reviewDescription, reviewTerm, reviewDate)
+VALUES (1, 4.5, 'Great prof, highly recommend!', 'Spring 2023','2022-01-01'),
+       (2, 3.0, 'Not bad, but could be better', 'Spring 2021','2022-01-02'),
+       (3, 2.5, 'Would not recommend this prof', 'Fall 2022','2022-01-03'),
+       (4, 4.0, 'Interesting class, learned a lot', 'Spring 2021','2022-01-04'),
+       (5, 3.5, 'Decent class, nothing special','Spring 2020', '2022-01-05'),
+       (6, 2.0, 'Terrible class, avoid if possible', 'Fall 2019','2022-01-06');
 
 -- Insert dummy data into writtenByUser table
 INSERT INTO writtenByUser (reviewID, computingID)

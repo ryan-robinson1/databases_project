@@ -82,11 +82,10 @@ class Controller
 
     public function class_reviews()
     {
-        $classID = $_POST['classid'];
-
+        $_classID = $_POST['classid'];
 
         $sql = "SELECT * FROM classdescription NATURAL JOIN classtype NATURAL JOIN classidentity NATURAL JOIN taughtby NATURAL JOIN professor LEFT JOIN classrequirement ON classrequirement.classID=classidentity.classID WHERE classidentity.classID=?";
-        $arr = $this->runSafeSQL($this->conn, $sql, 's', $classID);
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
 
         $classID = $arr[0]['classID'];
         $name = $arr[0]['name'];
@@ -100,32 +99,25 @@ class Controller
         $requirement = $arr[0]['requirement'];
         $email = $arr[0]['email'];
 
-
-        // foreach ($arr as $row) {
-        //     $name[] = $row['name'];
-        //     $section[] = $row['section'];
-        //     $classID[] = $row['classID'];
-        //     $department[] = $row['department'];
-        //     $description[] = $row['description'];
-        //     $subtitle[] = $row['subtitle'];
-        //     $professor[] = $row['prof_name'];
-        // }
-
-        // $stmt = mysqli_prepare($this->conn, $sql);
-        // if (!$stmt) {
-        //     die("Error preparing the statement: " . mysqli_error($this->conn));
-        // }
-        // mysqli_stmt_bind_param($stmt, 'i', $classID);
+        $sql = "SELECT * FROM classreview NATURAL JOIN review WHERE classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
 
 
-        // mysqli_stmt_execute($stmt);
-        // if (!mysqli_stmt_execute($stmt)) {
-        //     die("Error executing the statement: " . mysqli_stmt_error($stmt));
-        // }
+        $difficulty = [];
+        $hoursOutside = [];
+        $rating = [];
+        $reviewDescription = [];
+        $reviewTerm = [];
+        $reviewDate = [];
 
-        // mysqli_stmt_bind_result($stmt, $classID, $name, $section, $description, $credits, $department, $profID, $requirement);
-        // mysqli_stmt_fetch($stmt);
-
+        foreach ($arr as $row) {
+            $difficulty[] = $row['difficulty'];
+            $hoursOutside[] = $row['hoursOutside'];
+            $rating[] = $row['rating'];
+            $reviewDescription[] = $row['reviewDescription'];
+            $reviewTerm[] = $row['reviewTerm'];
+            $reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
+        }
 
         include "templates/reviews.php";
     }
