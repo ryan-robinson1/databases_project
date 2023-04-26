@@ -30,12 +30,21 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col-sm-12">
-        <h1>All Reviews for CS 4750</h1>
+        <h1><?= $name ?>: <?= $subtitle ?></h1>
+        <i><?= $description ?></i>
+        <hr>
+        <b>Department:</b> <?= $department ?> <br>
+        <b>Credits: </b> <?= $credits ?> <br>
+        <b>Taught By:</b> <?= $professor ?> <br>
+        <b>Professor Email:</b> <?= $email ?> <br>
+        <?php if (isset($requirement)) : ?>
+          <b>Prerequisite: </b><?= $requirement ?>
+        <?php endif; ?>
         <hr>
         <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Class/Professor Name</h5>
+            <h5 class="card-title">Term (i.e. Spring 2023)</h5>
             <p class="card-text">Review content goes here.</p>
             <p class="card-text">Submitted by: <a href="#">Username</a></p>
           </div>

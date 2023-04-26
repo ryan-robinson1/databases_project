@@ -41,7 +41,7 @@
             <div class="col-md-12">
 
 
-                <h5 class="card-title text-left">Results for: <?= strtoupper($_search) ?>..</h5>
+                <h5 class="card-title text-left">Results for: "<?= strtoupper($_search) ?>"</h5>
                 <div class="card light-grey-border">
                     <div class="card-body">
                         <div class="list-group">
@@ -49,9 +49,10 @@
                             for ($i = 0; $i < count($name); $i++) {
                             ?>
                                 <form action="?command=class_reviews" method="post">
-                                    <input type="hidden" name="classid" value="<?= $classID[$i] ?>">
+                                    <input type="hidden" name="classid" value='<?= $classID[$i] ?>'>
                                     <button type="submit" class="list-group-item list-group-item-action">
-                                        <?= $name[$i] ?> - <?= $subtitle[$i] ?>
+                                        <b><?= $name[$i] ?></b> - <?= $subtitle[$i] ?> <br>
+                                        <i>Prof. <?= $professor[$i] ?></i>
                                     </button>
                                 </form>
                             <?php

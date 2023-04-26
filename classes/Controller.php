@@ -54,48 +54,79 @@ class Controller
         $_search = $_POST["search_bar"];
 
         //We create the statement with prepare and bind to prevent SQL injection
-        $sql = "SELECT name, section, classID, department, description FROM classidentity NATURAL JOIN classtype NATURAL JOIN classdescription WHERE LOWER(name) LIKE LOWER(?)";
-        $stmt = mysqli_prepare($this->conn, $sql);
-        if (!$stmt) {
-            die("Error preparing the statement: " . mysqli_error($this->conn));
-        }
-        mysqli_stmt_bind_param($stmt, 's', $search_query);
-
-        //Execute the SQL and put the results into PHP variables to be used on the front end
-        mysqli_stmt_execute($stmt);
-        if (!mysqli_stmt_execute($stmt)) {
-            die("Error executing the statement: " . mysqli_stmt_error($stmt));
-        }
-        mysqli_stmt_bind_result($stmt, $_name, $_section, $_classID, $_department, $_description);
-
+        $sql = "SELECT name, section, classID, department, description, subtitle, prof_name FROM classidentity NATURAL JOIN classtype NATURAL JOIN classdescription NATURAL JOIN taughtby NATURAL JOIN professor WHERE LOWER(name) LIKE LOWER(?)";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $search_query);
         $name = [];
         $section = [];
         $classID = [];
         $department = [];
         $description = [];
         $subtitle = [];
+        $professor = [];
 
-
-        while (mysqli_stmt_fetch($stmt)) {
-            $pieces = explode(": ", $_description);
-            $_subtitle = $pieces[0];
-            $_description = $pieces[1];
-
-            $name[] = $_name;
-            $section[] = $_section;
-            $classID[] = $_classID;
-            $department[] = $_department;
-            $description[] = $_description;
-            $subtitle[] = $_subtitle;
+        foreach ($arr as $row) {
+            $name[] = $row['name'];
+            $section[] = $row['section'];
+            $classID[] = $row['classID'];
+            $department[] = $row['department'];
+            $description[] = $row['description'];
+            $subtitle[] = $row['subtitle'];
+            $professor[] = $row['prof_name'];
         }
 
 
         include "templates/results.php";
     }
+
+
+
     public function class_reviews()
     {
         $classID = $_POST['classid'];
-        echo $classID;
+
+
+        $sql = "SELECT * FROM classdescription NATURAL JOIN classtype NATURAL JOIN classidentity NATURAL JOIN taughtby NATURAL JOIN professor LEFT JOIN classrequirement ON classrequirement.classID=classidentity.classID WHERE classidentity.classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $classID);
+
+        $classID = $arr[0]['classID'];
+        $name = $arr[0]['name'];
+        $section = $arr[0]['section'];
+        $description = $arr[0]['description'];
+        $credits = $arr[0]['credits'];
+        $subtitle = $arr[0]['subtitle'];
+        $department = $arr[0]['department'];
+        $professor = $arr[0]['prof_name'];
+        $profID = $arr[0]['profID'];
+        $requirement = $arr[0]['requirement'];
+        $email = $arr[0]['email'];
+
+
+        // foreach ($arr as $row) {
+        //     $name[] = $row['name'];
+        //     $section[] = $row['section'];
+        //     $classID[] = $row['classID'];
+        //     $department[] = $row['department'];
+        //     $description[] = $row['description'];
+        //     $subtitle[] = $row['subtitle'];
+        //     $professor[] = $row['prof_name'];
+        // }
+
+        // $stmt = mysqli_prepare($this->conn, $sql);
+        // if (!$stmt) {
+        //     die("Error preparing the statement: " . mysqli_error($this->conn));
+        // }
+        // mysqli_stmt_bind_param($stmt, 'i', $classID);
+
+
+        // mysqli_stmt_execute($stmt);
+        // if (!mysqli_stmt_execute($stmt)) {
+        //     die("Error executing the statement: " . mysqli_stmt_error($stmt));
+        // }
+
+        // mysqli_stmt_bind_result($stmt, $classID, $name, $section, $description, $credits, $department, $profID, $requirement);
+        // mysqli_stmt_fetch($stmt);
+
+
         include "templates/reviews.php";
     }
     public function my_reviews()
@@ -105,6 +136,53 @@ class Controller
     public function add_review()
     {
         include "templates/add_review.php";
+    }
+    function runSafeSQL($conn, $sql, $paramTypes, ...$params)
+    {
+        // Prepare the statement
+        $stmt = mysqli_prepare($conn, $sql);
+        if (!$stmt) {
+            die("Error preparing the statement: " . mysqli_error($conn));
+        }
+
+        // Bind the parameters
+        if ($paramTypes != '') {
+            mysqli_stmt_bind_param($stmt, $paramTypes, ...$params);
+        }
+
+        // Execute the statement
+        if (!mysqli_stmt_execute($stmt)) {
+            die("Error executing the statement: " . mysqli_stmt_error($stmt));
+        }
+
+        // Bind the result variables
+        $result = mysqli_stmt_result_metadata($stmt);
+        if ($result) {
+            $fields = array();
+            $out = array();
+            $fields[0] = $stmt;
+            $count = 1;
+
+            while ($field = mysqli_fetch_field($result)) {
+                $fields[$count] = &$out[$field->name];
+                $count++;
+            }
+            call_user_func_array('mysqli_stmt_bind_result', $fields);
+
+            // Fetch the results into an array
+            $results = array();
+            while (mysqli_stmt_fetch($stmt)) {
+                $results[] = array_map(function ($value) {
+                    return $value;
+                }, $out);
+            }
+
+            // Close the statement and return the results
+            mysqli_stmt_close($stmt);
+            return $results;
+        } else {
+            die("Error binding result variables: " . mysqli_stmt_error($stmt));
+        }
     }
     // public function delete()
     // {
