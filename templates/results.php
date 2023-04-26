@@ -41,29 +41,33 @@
             <div class="col-md-12">
 
 
-                <h5 class="card-title text-left">Results for: CS 47..</h5>
+                <h5 class="card-title text-left">Results for: <?= strtoupper($_search) ?>..</h5>
                 <div class="card light-grey-border">
                     <div class="card-body">
-                        <div class="list-group ">
-                            <button type="button" class="list-group-item list-group-item-action">
-                                CS 4750 - Database Systems
-                            </button>
-                            <button type="button" class="list-group-item list-group-item-action">
-                                CS 4700 - Intro to Kubernetes
-                            </button>
-                            <button type="button" class="list-group-item list-group-item-action">
-                                CS 4790 - Database Systems 2
-                            </button>
-                            <!-- Add more buttons for additional search results -->
+                        <div class="list-group">
+                            <?php
+                            for ($i = 0; $i < count($name); $i++) {
+                            ?>
+                                <form action="?command=class_reviews" method="post">
+                                    <input type="hidden" name="classid" value="<?= $classID[$i] ?>">
+                                    <button type="submit" class="list-group-item list-group-item-action">
+                                        <?= $name[$i] ?> - <?= $subtitle[$i] ?>
+                                    </button>
+                                </form>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
     </main>
     <!-- Add Bootstrap and jQuery JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src=" https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

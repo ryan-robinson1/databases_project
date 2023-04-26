@@ -31,11 +31,11 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form>
+                <form action="?command=search_results" method="post">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Enter a class" aria-label="Enter a class" aria-describedby="basic-addon2">
+                        <input type="text" class="form-control" id="search_bar" name="search_bar">
                         <div class="input-group-append">
-                            <button class="btn btn-success" type="button">Search</button>
+                            <button class="btn btn-success" type="submit">Search</button>
                         </div>
                     </div>
                 </form>

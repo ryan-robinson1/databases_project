@@ -4,18 +4,13 @@ class Controller
 
     private $command;
     private $conn;
-    private $servername = "localhost";
-    private $username = "root";
-    private $password = "";
-    private $dbname = "potd5";
-    private $friends;
     public function __construct($command)
     {
         $this->command = $command;
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "potd5";
+        $dbname = "cs4750project";
 
         // Create connection
         $this->conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -51,17 +46,61 @@ class Controller
     }
     public function home()
     {
-        include "templates/results.php";
+        include "templates/home.php";
     }
     public function search_results()
     {
+        $search_query = '%' . $_POST["search_bar"] . '%';
+        $_search = $_POST["search_bar"];
+
+        //We create the statement with prepare and bind to prevent SQL injection
+        $sql = "SELECT name, section, classID, department, description FROM classidentity NATURAL JOIN classtype NATURAL JOIN classdescription WHERE LOWER(name) LIKE LOWER(?)";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        if (!$stmt) {
+            die("Error preparing the statement: " . mysqli_error($this->conn));
+        }
+        mysqli_stmt_bind_param($stmt, 's', $search_query);
+
+        //Execute the SQL and put the results into PHP variables to be used on the front end
+        mysqli_stmt_execute($stmt);
+        if (!mysqli_stmt_execute($stmt)) {
+            die("Error executing the statement: " . mysqli_stmt_error($stmt));
+        }
+        mysqli_stmt_bind_result($stmt, $_name, $_section, $_classID, $_department, $_description);
+
+        $name = [];
+        $section = [];
+        $classID = [];
+        $department = [];
+        $description = [];
+        $subtitle = [];
+
+
+        while (mysqli_stmt_fetch($stmt)) {
+            $pieces = explode(": ", $_description);
+            $_subtitle = $pieces[0];
+            $_description = $pieces[1];
+
+            $name[] = $_name;
+            $section[] = $_section;
+            $classID[] = $_classID;
+            $department[] = $_department;
+            $description[] = $_description;
+            $subtitle[] = $_subtitle;
+        }
+
+
         include "templates/results.php";
     }
     public function class_reviews()
     {
+        $classID = $_POST['classid'];
+        echo $classID;
+        include "templates/reviews.php";
     }
     public function my_reviews()
     {
+        include "templates/userReviews.php";
     }
     public function add_review()
     {
