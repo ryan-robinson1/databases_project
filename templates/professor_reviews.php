@@ -40,16 +40,11 @@
         <?php if (isset($requirement)) : ?>
           <b>Prerequisite: </b><?= $requirement ?>
         <?php endif; ?>
-        <form action="?command=prof_reviews" method="post">
-          <input type="hidden" name="classid" value='<?= $profID ?>'>
-          <button type="submit" class="btn btn-secondary mt-3" style="margin-bottom:10px">Reviews for <?= $professor ?> </button>
-        </form>
         <hr>
         <form action="?command=add_review" method="post">
           <input type="hidden" name="classid" value='<?= $_classID ?>'>
           <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
         </form>
-
         <?php
         if (count($rating) > 0) {
           for ($i = 0; $i < count($rating); $i++) {

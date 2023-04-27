@@ -43,6 +43,9 @@ class Controller
             case "add_review":
                 $this->add_review();
                 break;
+            case "prof_reviews":
+                $this->prof_reviews();
+                break;
             default:
                 $this->home();
                 break;
@@ -55,6 +58,16 @@ class Controller
     public function sign_in()
     {
         // include "templates/sign_in.php";
+        $sql = "INSERT INTO classrequirement VALUES (?,?)";
+        $this->runSafeSQL($this->conn, $sql, 'is', 10009, "COMM1600");
+    }
+    public function prof_reviews()
+    {
+        // $sql = "SELECT email, prof_name, leniency FROM professorreview NATURAL JOIN professor";
+        // $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+
+
+        include "templates/professor_reviews.php";
     }
     public function search_results()
     {
@@ -166,35 +179,42 @@ class Controller
             die("Error executing the statement: " . mysqli_stmt_error($stmt));
         }
 
-        // Bind the result variables
-        $result = mysqli_stmt_result_metadata($stmt);
-        if ($result) {
-            $fields = array();
-            $out = array();
-            $fields[0] = $stmt;
-            $count = 1;
+        // If the query is a select statement, bind the result variables
+        if (strtoupper(substr($sql, 0, 6)) === 'SELECT') {
+            $result = mysqli_stmt_result_metadata($stmt);
+            if ($result) {
+                $fields = array();
+                $out = array();
+                $fields[0] = $stmt;
+                $count = 1;
 
-            while ($field = mysqli_fetch_field($result)) {
-                $fields[$count] = &$out[$field->name];
-                $count++;
+                while ($field = mysqli_fetch_field($result)) {
+                    $fields[$count] = &$out[$field->name];
+                    $count++;
+                }
+                call_user_func_array('mysqli_stmt_bind_result', $fields);
+
+                // Fetch the results into an array
+                $results = array();
+                while (mysqli_stmt_fetch($stmt)) {
+                    $results[] = array_map(function ($value) {
+                        return $value;
+                    }, $out);
+                }
+
+                // Close the statement and return the results
+                mysqli_stmt_close($stmt);
+                return $results;
+            } else {
+                die("Error binding result variables: " . mysqli_stmt_error($stmt));
             }
-            call_user_func_array('mysqli_stmt_bind_result', $fields);
-
-            // Fetch the results into an array
-            $results = array();
-            while (mysqli_stmt_fetch($stmt)) {
-                $results[] = array_map(function ($value) {
-                    return $value;
-                }, $out);
-            }
-
-            // Close the statement and return the results
-            mysqli_stmt_close($stmt);
-            return $results;
         } else {
-            die("Error binding result variables: " . mysqli_stmt_error($stmt));
+            // For non-select queries, we just close the statement and return true
+            mysqli_stmt_close($stmt);
+            return true;
         }
     }
+
     // public function delete()
     // {
     //     $delete_id = $_POST['delete_id'];
