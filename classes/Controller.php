@@ -46,6 +46,9 @@ class Controller
             case "prof_reviews":
                 $this->prof_reviews();
                 break;
+            case "add_prof_review":
+                $this->add_prof_review();
+                break;
             default:
                 $this->home();
                 break;
@@ -57,14 +60,49 @@ class Controller
     }
     public function sign_in()
     {
-        // include "templates/sign_in.php";
-        $sql = "INSERT INTO classrequirement VALUES (?,?)";
-        $this->runSafeSQL($this->conn, $sql, 'is', 10009, "COMM1600");
+    }
+    public function add_prof_review()
+    {
+        $_profID = $_POST['profid'];
+        include "templates/add_prof_review.php";
     }
     public function prof_reviews()
     {
-        // $sql = "SELECT email, prof_name, leniency FROM professorreview NATURAL JOIN professor";
-        // $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+        $_profID = $_POST['profid'];
+        $sql = "SELECT email, prof_name FROM professor WHERE profID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
+
+        $professor = $arr[0]['prof_name'];
+        $email = $arr[0]['email'];
+
+
+        $sql = "SELECT name FROM classidentity NATURAL JOIN taughtby NATURAL JOIN professor WHERE profID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
+        $classes = [];
+
+        foreach ($arr as $row) {
+            $classes[] = $row['name'];
+        }
+        $comma_separated_classes = implode(", ", $classes);
+
+
+        $sql = "SELECT * FROM professorreview  NATURAL JOIN review WHERE profID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
+        $leniency = [];
+        $rating = [];
+        $reviewDescription = [];
+        $reviewTerm = [];
+        $reviewDate = [];
+
+        foreach ($arr as $row) {
+            $leniency[] = $row['leniency'];
+            $rating[] = $row['rating'];
+            $reviewDescription[] = $row['reviewDescription'];
+            $reviewTerm[] = $row['reviewTerm'];
+            $reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
+        }
+
+
 
 
         include "templates/professor_reviews.php";

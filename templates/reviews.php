@@ -41,7 +41,7 @@
           <b>Prerequisite: </b><?= $requirement ?>
         <?php endif; ?>
         <form action="?command=prof_reviews" method="post">
-          <input type="hidden" name="classid" value='<?= $profID ?>'>
+          <input type="hidden" name="profid" value='<?= $profID ?>'>
           <button type="submit" class="btn btn-secondary mt-3" style="margin-bottom:10px">Reviews for <?= $professor ?> </button>
         </form>
         <hr>

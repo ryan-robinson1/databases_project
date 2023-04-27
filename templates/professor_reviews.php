@@ -30,19 +30,13 @@
   <div class="container mt-3">
     <div class="row">
       <div class="col-sm-12">
-        <h1><?= $name ?>: <?= $subtitle ?></h1>
-        <i><?= $description ?></i>
+        <h1><?= $professor ?> </h1>
+        <i><?= $email ?></i>
         <hr>
-        <b>Department:</b> <?= $department ?> <br>
-        <b>Credits: </b> <?= $credits ?> <br>
-        <b>Taught By:</b> <?= $professor ?> <br>
-        <b>Professor Email:</b> <?= $email ?> <br>
-        <?php if (isset($requirement)) : ?>
-          <b>Prerequisite: </b><?= $requirement ?>
-        <?php endif; ?>
+        <b>Classes Taught: </b> <?= $comma_separated_classes ?>
         <hr>
-        <form action="?command=add_review" method="post">
-          <input type="hidden" name="classid" value='<?= $_classID ?>'>
+        <form action="?command=add_prof_review" method="post">
+          <input type="hidden" name="profid" value='<?= $profID ?>'>
           <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
         </form>
         <?php
@@ -59,8 +53,7 @@
                   <div class="col-md-4">
                     <div class="card">
                       <div class="card-body">
-                        <p class="card-text">Difficulty: <small class="text-muted"><?= $difficulty[$i] ?></small></p>
-                        <p class="card-text">Hours Outside: <small class="text-muted"><?= $hoursOutside[$i] ?></small></p>
+                        <p class="card-text">Leniency: <small class="text-muted"><?= $leniency[$i] ?></small></p>
                         <p class="card-text">Rating: <small class="text-muted"><?= $rating[$i] ?></small></p>
                         <p class="card-text">Review Date: <small class="text-muted"><?= $reviewDate[$i] ?></small></p>
                       </div>
