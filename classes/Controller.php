@@ -40,6 +40,9 @@ class Controller
             case "sign_up":
                 $this->sign_up();
                 break;
+            case "log_in":
+                $this->log_in();
+                break;
             case "my_reviews":
                 $this->my_reviews();
                 break;
@@ -75,6 +78,33 @@ class Controller
         $sql = "INSERT INTO theuser VALUES (?, ?, ?, ?)";
         $this->runSafeSQL($this->conn, $sql, 'ssss', $_enteredID, $_enteredName, $_enteredEmail, $_hashedPwd);
         include "templates/home.php";
+    }
+
+    public function log_in()
+    {
+        $_logInID = $_POST['computingID'];
+        $_logInPwd = htmlspecialchars($_POST['pwd']);
+
+        $sql = "SELECT pwd FROM theuser WHERE computingID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_logInID);
+
+        if ($arr->num_rows > 0) {
+            $usersPwd = $arr[0]['pwd'];
+        }
+        else {
+            echo "There are no users with this username. Please try again or sign up!";
+        }
+        $checkPwd = password_hash($_logInPwd, PASSWORD_BCRYPT);
+
+        if (password_verify($checkPwd, $usersPwd)) {
+            session_start();
+            $_SESSION["loggedin_username"] = $_logInID; // not sure if this is exactly how to do this
+            // or just redirect to where it should go on your end
+            header("Location: http://localhost/Project/databases_project/templates/home.php");
+        }
+        else {
+            echo "<span class='msg'>Username and password do not match our record</span> <br/>";
+        }
     }
     public function add_prof_review()
     {

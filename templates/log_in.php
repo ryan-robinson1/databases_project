@@ -20,36 +20,28 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                    <form action="?command=log_in" method="post">
-                        <button class="btn" type="submit">Log In</button>
-                    </form>
-                </li>
                 <li class="nav-item">
-                    <form action="?command=sign_in" method="post">
-                        <button class="btn" type="submit">Sign Up</button>
-                    </form>
+                    <a class="nav-link" href="#">Sign In</a>
                 </li>
             </ul>
         </div>
     </nav>
-
-    <!-- Main content area -->
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form action="?command=search_results" method="post">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="search_bar" name="search_bar">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+    <div class="container">  
+        <h2 class="my-4">Sign In</h2>
+        <div class="card p-2">
+            <form action="?command=log_in" method="post">
+                <div class="form-group">     
+                    Computing ID: <input type="text" name="computingID" required /> <br/>
+                </div>
+                <div class="form-group"> 
+                    Password: <input type="password" name="pwd" required /> <br/>
+                </div>
+                <input type="submit" name= "actionBtn" value="Log In" class="btn btn-success mt-3" />
+            </form>
         </div>
     </div>
-
+  <!-- php include('header.html') ?> -->
+  
+    </div>
 </body>
-
 </html>
