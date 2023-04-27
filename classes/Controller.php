@@ -10,6 +10,7 @@ class Controller
         $servername = "localhost";
         $username = "root";
         $password = "";
+        //Name of database in phpmyadmin
         $dbname = "cs4750project";
 
         // Create connection
@@ -33,6 +34,9 @@ class Controller
             case "class_reviews":
                 $this->class_reviews();
                 break;
+            case "sign_in":
+                $this->sign_in();
+                break;
             case "my_reviews":
                 $this->my_reviews();
                 break;
@@ -48,13 +52,17 @@ class Controller
     {
         include "templates/home.php";
     }
+    public function sign_in()
+    {
+        // include "templates/sign_in.php";
+    }
     public function search_results()
     {
         $search_query = '%' . $_POST["search_bar"] . '%';
         $_search = $_POST["search_bar"];
 
         //We create the statement with prepare and bind to prevent SQL injection
-        $sql = "SELECT name, section, classID, department, description, subtitle, prof_name FROM classidentity NATURAL JOIN classtype NATURAL JOIN classdescription NATURAL JOIN taughtby NATURAL JOIN professor WHERE LOWER(name) LIKE LOWER(?)";
+        $sql = "SELECT name, section, classID, department, description, subtitle, prof_name FROM classidentity NATURAL JOIN classtype NATURAL JOIN classdescription NATURAL JOIN taughtby NATURAL JOIN professor WHERE LOWER(name) LIKE LOWER(?) ORDER BY name";
         $arr = $this->runSafeSQL($this->conn, $sql, 's', $search_query);
         $name = [];
         $section = [];
@@ -85,6 +93,7 @@ class Controller
         $_classID = $_POST['classid'];
 
         $sql = "SELECT * FROM classdescription NATURAL JOIN classtype NATURAL JOIN classidentity NATURAL JOIN taughtby NATURAL JOIN professor LEFT JOIN classrequirement ON classrequirement.classID=classidentity.classID WHERE classidentity.classID=?";
+        //First arg is the connection, second arg is the sql, third arg is the datatype, 4th arg is all the variables
         $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
 
         $classID = $arr[0]['classID'];

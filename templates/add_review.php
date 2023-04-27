@@ -76,17 +76,18 @@
                 <div class="form-group">
                     <label for="semester">Semester:</label>
                     <select class="form-control" id="semester">
-                        <option>Spring 2021</option>
-                        <option>Fall 2021</option>
-                        <option>Spring 2022</option>
-                        <option>Fall 2022</option>
                         <option>Spring 2023</option>
+                        <option>Fall 2022</option>
+                        <option>Spring 2022</option>
+                        <option>Fall 2021</option>
+                        <option>Spring 2021</option>
+
+
                         <!-- Add more semesters as needed -->
                     </select>
                 </div>
 
                 <div class="form-group mt-3">
-                    <label for="rating">Rating (out of 5):</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
                             <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>">

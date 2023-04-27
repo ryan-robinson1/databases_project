@@ -21,7 +21,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sign In</a>
+                    <form action="?command=sign_in" method="post">
+                        <button class="btn" type="submit">Sign In</button>
+                    </form>
                 </li>
             </ul>
         </div>
