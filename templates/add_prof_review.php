@@ -86,6 +86,7 @@
                 </div>
 
                 <div class="form-group mt-3">
+                    <label for="rating">Rating:</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
                             <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>">
@@ -93,6 +94,8 @@
                         <?php endfor; ?>
                     </div>
                 </div>
+
+
 
 
                 <div class="form-group mt-3">

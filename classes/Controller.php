@@ -37,6 +37,9 @@ class Controller
             case "sign_in":
                 $this->sign_in();
                 break;
+            case "sign_up":
+                $this->sign_up();
+                break;
             case "my_reviews":
                 $this->my_reviews();
                 break;
@@ -60,10 +63,24 @@ class Controller
     }
     public function sign_in()
     {
+        include "templates/sign_up.php";
+    }
+    public function sign_up()
+    {
+        $_enteredID = $_POST['computingID'];
+        $_enteredName = $_POST['name'];
+        $_enteredEmail = $_POST['email'];
+        $enteredPwd = $_POST['pwd'];
+        $_hashedPwd = password_hash($enteredPwd, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO theuser VALUES (?, ?, ?, ?)";
+        $this->runSafeSQL($this->conn, $sql, 'ssss', $_enteredID, $_enteredName, $_enteredEmail, $_hashedPwd);
+        include "templates/home.php";
     }
     public function add_prof_review()
     {
         $_profID = $_POST['profid'];
+
+
         include "templates/add_prof_review.php";
     }
     public function prof_reviews()

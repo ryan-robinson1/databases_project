@@ -2,7 +2,7 @@ CREATE TABLE TheUser (
   computingID VARCHAR(50) PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
-  profilePicLink VARCHAR(255),
+  pwd VARCHAR(255),
   UNIQUE (email)
 );
 
