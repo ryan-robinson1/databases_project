@@ -113,11 +113,28 @@ class Controller
         $_enteredName = $_POST['name'];
         $_enteredEmail = $_POST['email'];
         $enteredPwd = $_POST['pwd'];
-        $_hashedPwd = password_hash($enteredPwd, PASSWORD_BCRYPT);
-        $sql = "INSERT INTO theuser VALUES (?, ?, ?, ?)";
-        $this->runSafeSQL($this->conn, $sql, 'ssss', $_enteredID, $_enteredName, $_enteredEmail, $_hashedPwd);
-        $_SESSION["loggedin_username"] = $_enteredID;
-        include "templates/home.php";
+
+        $sql = "SELECT * FROM theuser WHERE computingID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_enteredID);
+
+        $sql = "SELECT * FROM theuser WHERE email=?";
+        $arr2 = $this->runSafeSQL($this->conn, $sql, 's',  $_enteredEmail);
+
+        if (count($arr) > 0) {
+            $_SESSION['error'] = "<div class='alert alert-danger'>This student ID has already been registered! </div>";
+            include "templates/sign_up.php";
+            exit();
+        } else if (count($arr2) > 0) {
+            $_SESSION['error'] = "<div class='alert alert-danger'>This email has already been registered! </div>";
+            include "templates/sign_up.php";
+            exit();
+        } else {
+            $_hashedPwd = password_hash($enteredPwd, PASSWORD_BCRYPT);
+            $sql = "INSERT INTO theuser VALUES (?, ?, ?, ?)";
+            $this->runSafeSQL($this->conn, $sql, 'ssss', $_enteredID, $_enteredName, $_enteredEmail, $_hashedPwd);
+            $_SESSION["loggedin_username"] = $_enteredID;
+            include "templates/home.php";
+        }
     }
     public function add_prof_review()
     {

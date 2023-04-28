@@ -11,6 +11,69 @@
 </head>
 
 <body>
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo $_SESSION['error'];
+        unset($_SESSION['error']); // So the message doesn't persist on page refresh
+    }
+    ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            // RegEx patterns
+            var lowerCaseRegEx = /[a-z]/;
+            var upperCaseRegEx = /[A-Z]/;
+            var numericRegEx = /[0-9]/;
+            var emailRegEx = /^[\w-]+(\.[\w-]+)*@virginia\.edu$/;
+            var abnormalCharRegEx = /[^a-zA-Z0-9@.]/;
+
+            $("#pwd, #email, #computingID").on("keyup", function() {
+                // Remove previous error messages
+                $(".error").remove();
+
+                var pwd = $("#pwd").val();
+                var email = $("#email").val();
+                var computingID = $("#computingID").val();
+
+                // Check password strength
+                if (pwd.length < 6 || !lowerCaseRegEx.test(pwd) || !upperCaseRegEx.test(pwd) || !numericRegEx.test(pwd)) {
+                    $("#pwd").addClass("is-invalid").after("<div class='error text-danger'>Password must be at least 6 characters long and include an uppercase letter, a lowercase letter, and a number.</div>");
+                } else {
+                    $("#pwd").removeClass("is-invalid");
+                }
+
+                // Check email validity
+                if (!emailRegEx.test(email)) {
+                    $("#email").addClass("is-invalid").after("<div class='error text-danger'>Please enter a valid @virginia.edu email address.</div>");
+                } else {
+                    $("#email").removeClass("is-invalid");
+                }
+
+                // Check computing ID length
+                if (computingID.length < 5) {
+                    $("#computingID").addClass("is-invalid").after("<div class='error text-danger'>Your Computing ID is too short. Please use at least 5 characters.</div>");
+                } else {
+                    $("#computingID").removeClass("is-invalid");
+                }
+
+                // Check for abnormal characters
+                if (abnormalCharRegEx.test(pwd) || abnormalCharRegEx.test(email) || abnormalCharRegEx.test(computingID)) {
+                    $(this).addClass("is-invalid").after("<div class='error text-danger'>Please don't use weird or abnormal characters.</div>");
+                } else {
+                    $(this).removeClass("is-invalid");
+                }
+            });
+
+            $("form").submit(function(e) {
+                // Prevent form submission if there are any errors
+                if ($(".is-invalid").length) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+
+
 
     <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
