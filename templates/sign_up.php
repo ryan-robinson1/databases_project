@@ -19,39 +19,40 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign In</a>
-                </li>
-            </ul>
         </div>
     </nav>
     <div class="container">
-        <h2 class="my-4">Sign Up</h2>
-
-        <form action="?command=sign_up" method="post">
-            <button class="btn" type="submit">Insert</button>
-        </form>
-        <div class="card p-2">
-            <form action="?command=sign_up" method="post">
-                <div class="form-group">
-                    Name: <input type="text" name="name" required /> <br />
+        <div class="row">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Sign Up</h2>
+                        <form action="?command=sign_up_potential_user" method="post">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="computingID">Computing ID:</label>
+                                <input type="text" class="form-control" id="computingID" name="computingID" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">Password:</label>
+                                <input type="password" class="form-control" id="pwd" name="pwd" required />
+                            </div>
+                            <button type="submit" class="btn btn-success mt-3">Submit</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="form-group">
-                    Computing ID: <input type="text" name="computingID" required /> <br />
-                </div>
-                <div class="form-group">
-                    Email: <input type="text" name="email" required /> <br />
-                </div>
-                <div class="form-group">
-                    Password: <input type="password" name="pwd" required /> <br />
-                </div>
-                <input type="submit" name="actionBtn" value="Submit" class="btn btn-success mt-3" />
-            </form>
+            </div>
         </div>
     </div>
-    <!-- php include('header.html') ?> -->
-    </div>
+
+
 </body>
 
 </html>

@@ -11,6 +11,12 @@
 </head>
 
 <body>
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo $_SESSION['error'];
+        unset($_SESSION['error']); // So the message doesn't persist on page refresh
+    }
+    ?>
 
     <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,29 +27,41 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <form action="?command=sign_in" method="post">
-                        <button class="btn" type="submit">Sign Up</button>
-                    </form>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="container">  
-        <h2 class="my-4">Sign In</h2>
-        <div class="card p-2">
-            <form action="?command=log_in" method="post">
-                <div class="form-group">     
-                    Computing ID: <input type="text" name="computingID" required /> <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Sign In</h2>
+                        <form action="?command=log_in_potential_user" method="post">
+                            <div class="form-group">
+                                <label for="computingID">Computing ID:</label>
+                                <input type="text" class="form-control" id="computingID" name="computingID" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="pwd">Password:</label>
+                                <input type="password" class="form-control" id="pwd" name="pwd" required />
+                            </div>
+                            <button type="submit" class="btn btn-success mt-3">Log In</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="form-group"> 
-                    Password: <input type="password" name="pwd" required /> <br/>
+                <div class="mt-3 text-center">
+                    No account?
+                    <form action="?command=sign_up" method="post">
+                        <button class="btn" type="submit">Sign Up</button>
+                    </form>
                 </div>
-                <input type="submit" name= "actionBtn" value="Log In" class="btn btn-success mt-3" />
-            </form>
+            </div>
         </div>
     </div>
-  <!-- php include('header.html') ?> -->
-  
+    <!-- php include('header.html') ?> -->
+
     </div>
 </body>
+
 </html>

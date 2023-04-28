@@ -30,26 +30,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                    <form action="?command=log_in" method="post"> <!-- not sure if this would need to be change based on whats below-->
-                        <button class="btn" type="submit" id="userBtn">Log In</button>
-                        <script>
-                            const userid = sessionStorage.getItem("loggedin_username");
-                            if (userid) {
-                                const userButton = document.querySelector('#userBtn');
-                                userButton.textContent = userid;
-
-                                userButton.addEventListener('click', () => {
-                                    window.location.href = '/userReviews/' + userid; // REPLACE WITH ACTUAL USER SPECIFIC URL
-                                });
-                            }
-                        </script>
-                    </form>
-                </li>
                 <li class="nav-item">
-                    <form action="?command=sign_in" method="post">
-                        <button class="btn" type="submit">Sign Up</button>
-                    </form>
+                    <?php
+                    if (isset($_SESSION["loggedin_username"])) {
+                    ?>
+                        <form action="?command=my_reviews" method="post">
+                            <button class="btn" type="submit" id="userBtn"><?php echo $_SESSION["loggedin_username"]; ?></button>
+                        </form>
+                    <?php
+                    } else {
+                    ?>
+                        <form action="?command=log_in" method="post">
+                            <button class="btn" type="submit" id="userBtn">Log In</button>
+                        </form>
+                    <?php
+                    }
+                    ?>
                 </li>
             </ul>
         </div>
