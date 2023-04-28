@@ -11,9 +11,13 @@
 </head>
 
 <body>
-  <!-- Navigation bar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><strong>Hoo's Reviews</strong></a>
+  <?php
+  if (isset($_SESSION['error'])) {
+    echo $_SESSION['error'];
+    unset($_SESSION['error']); // So the message doesn't persist on page refresh
+  }
+  ?>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light"><a class="navbar-brand" href="#" onclick="window.location = window.location.href + '?command=home'; return false;"><strong>Hoo's Reviews</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,7 +28,7 @@
           if (isset($_SESSION["loggedin_username"])) {
           ?>
             <form action="?command=my_reviews" method="post">
-              <button class="btn" type="submit" id="userBtn"><?php echo $_SESSION["loggedin_username"]; ?></button>
+              <button class="btn" type="submit" id="userBtn">My Reviews</button>
             </form>
           <?php
           } else {
@@ -61,8 +65,13 @@
         <hr>
         <form action="?command=add_review" method="post">
           <input type="hidden" name="classid" value='<?= $_classID ?>'>
-          <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+          <?php if (isset($_SESSION["loggedin_username"])) : ?>
+            <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+          <?php else : ?>
+            <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px" disabled>+Add Review</button>
+          <?php endif; ?>
         </form>
+
 
         <?php
         if (count($rating) > 0) {
@@ -105,13 +114,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    setTimeout(() => {
-      document.location.reload();
-    }, 3000);
-  </script>
-
 
 </body>
 

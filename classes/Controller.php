@@ -31,6 +31,9 @@ class Controller
             case "search_results":
                 $this->search_results();
                 break;
+            case "submit_class_review":
+                $this->submit_class_review();
+                break;
             case "class_reviews":
                 $this->class_reviews();
                 break;
@@ -65,6 +68,37 @@ class Controller
                 $this->home();
                 break;
         }
+    }
+    public function submit_class_review()
+    {
+        $professor = $_POST['professor'];
+        $semester = $_POST['semester'];
+        $rating = $_POST['rating'];
+        $difficulty = $_POST['difficulty'];
+        $hours = $_POST['hours'];
+        $review = $_POST['review'];
+        $class_id = $_POST['class_id'];
+
+
+        $sql = "SELECT * FROM classreview NATURAL JOIN writtenbyuser WHERE computingID=? AND classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 'si', $_SESSION["loggedin_username"],  $class_id);
+
+        if (count($arr) > 0) {
+            $_SESSION['error'] = "<div class='alert alert-danger'>Error: Can't review the same class twice! </div>";
+            $this->home();
+            exit();
+        }
+
+        $sql = "INSERT INTO review (rating, reviewDescription, reviewTerm) VALUES (?, ?, ?)";
+        $review_id = $this->runSafeSQL($this->conn, $sql, 'iss', $rating, $review, $semester);
+
+        $sql = "INSERT INTO classreview (reviewID, difficulty, hoursOutside, classID) VALUES (?, ?, ?, ?)";
+        $this->runSafeSQL($this->conn, $sql, 'iiii', $review_id, $difficulty, $hours, $class_id);
+
+        $sql = "INSERT INTO writtenbyuser (reviewID, computingID) VALUES (?, ?)";
+        $this->runSafeSQL($this->conn, $sql, 'is', $review_id,  $_SESSION["loggedin_username"]);
+
+        include "templates/home.php";
     }
     public function log_out()
     {
@@ -323,9 +357,16 @@ class Controller
                 die("Error binding result variables: " . mysqli_stmt_error($stmt));
             }
         } else {
-            // For non-select queries, we just close the statement and return true
-            mysqli_stmt_close($stmt);
-            return true;
+            // For non-select queries, if it is an INSERT query, return the last inserted id
+            if (strtoupper(substr($sql, 0, 6)) === 'INSERT') {
+                $last_id = mysqli_insert_id($conn);
+                mysqli_stmt_close($stmt);
+                return $last_id;
+            } else {
+                // For other types of queries, we just close the statement and return true
+                mysqli_stmt_close($stmt);
+                return true;
+            }
         }
     }
 }

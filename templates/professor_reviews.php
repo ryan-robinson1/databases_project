@@ -13,7 +13,7 @@
 <body>
   <!-- Navigation bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><strong>Hoo's Reviews</strong></a>
+    <a class="navbar-brand" href="#" onclick="window.location = window.location.href + '?command=home'; return false;"><strong>Hoo's Reviews</strong></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -50,10 +50,15 @@
         <hr>
         <b>Classes Taught: </b> <?= $comma_separated_classes ?>
         <hr>
-        <form action="?command=add_prof_review" method="post">
-          <input type="hidden" name="profid" value='<?= $profID ?>'>
-          <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+        <form action="?command=add_review" method="post">
+          <input type="hidden" name="classid" value='<?= $_classID ?>'>
+          <?php if (isset($_SESSION["loggedin_username"])) : ?>
+            <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
+          <?php else : ?>
+            <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px" disabled>+Add Review</button>
+          <?php endif; ?>
         </form>
+
         <?php
         if (count($rating) > 0) {
           for ($i = 0; $i < count($rating); $i++) {

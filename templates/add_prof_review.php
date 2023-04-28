@@ -50,7 +50,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#"><strong>Hoo's Reviews</strong></a>
+        <a class="navbar-brand" href="#" onclick="window.location = window.location.href + '?command=home'; return false;"><strong>Hoo's Reviews</strong></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -61,7 +61,7 @@
                     if (isset($_SESSION["loggedin_username"])) {
                     ?>
                         <form action="?command=my_reviews" method="post">
-                            <button class="btn" type="submit" id="userBtn"><?php echo $_SESSION["loggedin_username"]; ?></button>
+                            <button class="btn" type="submit" id="userBtn">My Reviews</button>
                         </form>
                     <?php
                     } else {
