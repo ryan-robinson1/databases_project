@@ -111,9 +111,8 @@ class Controller
         $review = $_POST['review'];
         $prof_id = $_POST['prof_id'];
 
-
         $sql = "SELECT * FROM professorreview NATURAL JOIN writtenbyuser WHERE computingID=? AND profID=?";
-        $arr = $this->runSafeSQL($this->conn, $sql, 'si', $_SESSION["loggedin_username"],  $prof_id);
+        $arr = $this->runSafeSQL($this->conn, $sql, 'ss', $_SESSION["loggedin_username"],  $prof_id);
 
         if (count($arr) > 0) {
             $_SESSION['error'] = "<div class='alert alert-danger'>Error: Can't review the same professor twice! </div>";
@@ -204,6 +203,7 @@ class Controller
     }
     public function add_prof_review()
     {
+
         $_profID = $_POST['profid'];
         $sql = "SELECT prof_name FROM professor WHERE profID=?";
         $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
@@ -329,6 +329,45 @@ class Controller
     }
     public function my_reviews()
     {
+        $sql = "SELECT * FROM classreview NATURAL JOIN review NATURAL JOIN writtenbyuser NATURAL JOIN classidentity WHERE computingID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's',  $_SESSION["loggedin_username"]);
+
+        $class_difficulty = [];
+        $class_hoursOutside = [];
+        $class_rating = [];
+        $class_reviewDescription = [];
+        $class_reviewTerm = [];
+        $class_reviewDate = [];
+        $class_name = [];
+        foreach ($arr as $row) {
+            $class_difficulty[] = $row['difficulty'];
+            $class_hoursOutside[] = $row['hoursOutside'];
+            $class_rating[] = $row['rating'];
+            $class_reviewDescription[] = $row['reviewDescription'];
+            $class_reviewTerm[] = $row['reviewTerm'];
+            $class_reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
+            $class_name[] = $row['name'];
+        }
+
+        $sql = "SELECT * FROM professorreview NATURAL JOIN review NATURAL JOIN writtenbyuser NATURAL JOIN professor WHERE computingID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's',  $_SESSION["loggedin_username"]);
+        $prof_leniency = [];
+        $prof_rating = [];
+        $prof_reviewDescription = [];
+        $prof_reviewTerm = [];
+        $prof_reviewDate = [];
+        $prof_name = [];
+
+        foreach ($arr as $row) {
+            $prof_leniency[] = $row['leniency'];
+            $prof_rating[] = $row['rating'];
+            $prof_reviewDescription[] = $row['reviewDescription'];
+            $prof_reviewTerm[] = $row['reviewTerm'];
+            $prof_reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
+            $prof_name[] = $row['prof_name'];
+        }
+
+
         include "templates/userReviews.php";
     }
     public function add_review()

@@ -41,7 +41,6 @@
     </div>
   </nav>
 
-  <!-- Page content -->
   <div class="container mt-3">
     <div class="row">
       <div class="col-sm-12">
