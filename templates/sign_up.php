@@ -50,8 +50,8 @@
                 }
 
                 // Check computing ID length
-                if (computingID.length < 5) {
-                    $("#computingID").addClass("is-invalid").after("<div class='error text-danger'>Your Computing ID is too short. Please use at least 5 characters.</div>");
+                if (computingID.length < 3) {
+                    $("#computingID").addClass("is-invalid").after("<div class='error text-danger'>Your Computing ID is too short. Please use at least 2 characters.</div>");
                 } else {
                     $("#computingID").removeClass("is-invalid");
                 }

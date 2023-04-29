@@ -72,24 +72,18 @@
                     <?php
                     }
                     ?>
+                    </form>
                 </li>
-
             </ul>
         </div>
     </nav>
 
     <div class="container">
-        <h2 class="my-4">Write a review for <?= $class_name ?>:</h2>
+        <h2 class="my-4">Edit Review For <?= $prof_name ?>:</h2>
         <div class="card p-4">
-            <form action="?command=submit_class_review" method="post">
-                <input type="hidden" name="class_id" value="<?= $_classID ?>">
-                <div class="form-group mt-3">
-                    <label for="rating">Professor:</label>
-                    <div class="thin-card">
-                        <input type="hidden" name="professor" value="<?= htmlspecialchars($prof_name) ?>">
-                        <?= htmlspecialchars($prof_name) ?>
-                    </div>
-                </div>
+            <form action="?command=submit_edited_prof_review" method="post">
+                <input type="hidden" name="prof_id" value="<?= $profID ?>">
+                <input type="hidden" name="review_id" value="<?= $reviewID ?>">
                 <div class="form-group">
                     <label for="semester">Semester:</label>
                     <select class="form-control" id="semester" name="semester">
@@ -106,35 +100,28 @@
                     <label for="rating">Rating:</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
-                            <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>">
+                            <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>" <?php echo ($i == $rating) ? 'checked' : ''; ?>>
                             <label for="rating-<?= $i ?>">&#9733;</label>
                         <?php endfor; ?>
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
-                    <label for="difficulty">Difficulty:</label>
+                    <label for="difficulty">Leniency:</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
-                            <input type="radio" name="difficulty" id="difficulty-<?= $i ?>" value="<?= $i ?>">
-                            <label for="difficulty-<?= $i ?>">&#9733;</label>
+                            <input type="radio" name="leniency" id="leniency-<?= $i ?>" value="<?= $i ?>" <?php echo ($i == $leniency) ? 'checked' : ''; ?>>
+                            <label for="leniency-<?= $i ?>">&#9733;</label>
                         <?php endfor; ?>
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
-                    <label for="hours">Hours Outside of Class per Week:</label>
-                    <input class="form-control" id="hours" name="hours" type="number" min="0" max="15">
-                </div>
-
-                <div class="form-group mt-3">
                     <label for="review">Review:</label>
-                    <textarea class="form-control" name="review" id="review" rows="5"></textarea>
+                    <textarea class="form-control" name="review" id="review" rows="5"><?= $review_description ?></textarea>
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Submit</button>
             </form>
-
-
         </div>
     </div>
 

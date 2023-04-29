@@ -74,10 +74,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12 text-end">
+                                                <div class="d-flex">
+                                                    <form action="?command=edit_class_review" method="post" class="me-2">
+                                                        <input type="hidden" name="reviewID" value="<?= $class_reviewID ?>">
+                                                        <button class="btn btn-dark" style="margin-right:5px">Edit</button>
+                                                    </form>
+                                                    <form action="?command=delete_class_review" method="post">
+                                                        <input type="hidden" name="reviewID" value="<?= $class_reviewID ?>">
+                                                        <button class="btn btn-dark">Delete</button>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-
                             <?php
                             }
                         } else {
@@ -117,6 +130,21 @@
                                                         <p class="card-text">Review Date: <small class="text-muted"><?= $prof_reviewDate[$i] ?></small></p>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12 text-end">
+                                                <div class="d-flex">
+                                                    <form action="?command=edit_prof_review" method="post" class="me-2">
+                                                        <input type="hidden" name="reviewID" value="<?= $prof_reviewID ?>">
+                                                        <button class="btn btn-dark" style="margin-right:5px">Edit</button>
+                                                    </form>
+                                                    <form action="?command=delete_prof_review" method="post">
+                                                        <input type="hidden" name="reviewID" value="<?= $prof_reviewID ?>">
+                                                        <button class="btn btn-dark">Delete</button>
+                                                    </form>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>

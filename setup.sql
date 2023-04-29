@@ -86,28 +86,28 @@ CREATE TABLE professorReview (
 
 
 -- Insert dummy data into User table
-INSERT INTO TheUser (computingID, name, email, profilePicLink)
-VALUES ('user1', 'John Smith', 'john.smith@example.com', 'http://example.com/profilepic/user1'),
-       ('user2', 'Jane Doe', 'jane.doe@example.com', 'http://example.com/profilepic/user2'),
-       ('user3', 'David Lee', 'david.lee@example.com', 'http://example.com/profilepic/user3');
+-- INSERT INTO TheUser (computingID, name, email, profilePicLink)
+-- VALUES ('user1', 'John Smith', 'john.smith@example.com', 'http://example.com/profilepic/user1'),
+--        ('user2', 'Jane Doe', 'jane.doe@example.com', 'http://example.com/profilepic/user2'),
+--        ('user3', 'David Lee', 'david.lee@example.com', 'http://example.com/profilepic/user3');
 
 -- Insert dummy data into Review table
-INSERT INTO Review (reviewID, rating, reviewDescription, reviewTerm, reviewDate)
-VALUES (1, 4.5, 'Great prof, highly recommend!', 'Spring 2023','2022-01-01'),
-       (2, 3.0, 'Not bad, but could be better', 'Spring 2021','2022-01-02'),
-       (3, 2.5, 'Would not recommend this prof', 'Fall 2022','2022-01-03'),
-       (4, 4.0, 'Interesting class, learned a lot', 'Spring 2021','2022-01-04'),
-       (5, 3.5, 'Decent class, nothing special','Spring 2020', '2022-01-05'),
-       (6, 2.0, 'Terrible class, avoid if possible', 'Fall 2019','2022-01-06');
+-- INSERT INTO Review (reviewID, rating, reviewDescription, reviewTerm, reviewDate)
+-- VALUES (1, 4.5, 'Great prof, highly recommend!', 'Spring 2023','2022-01-01'),
+--        (2, 3.0, 'Not bad, but could be better', 'Spring 2021','2022-01-02'),
+--        (3, 2.5, 'Would not recommend this prof', 'Fall 2022','2022-01-03'),
+--        (4, 4.0, 'Interesting class, learned a lot', 'Spring 2021','2022-01-04'),
+--        (5, 3.5, 'Decent class, nothing special','Spring 2020', '2022-01-05'),
+--        (6, 2.0, 'Terrible class, avoid if possible', 'Fall 2019','2022-01-06');
 
 -- Insert dummy data into writtenByUser table
-INSERT INTO writtenByUser (reviewID, computingID)
-VALUES (1, 'user1'),
-       (2, 'user2'),
-       (3, 'user3'),
-(4, 'user1'),
-       (5, 'user2'),
-       (6, 'user3');
+-- INSERT INTO writtenByUser (reviewID, computingID)
+-- VALUES (1, 'user1'),
+--        (2, 'user2'),
+--        (3, 'user3'),
+-- (4, 'user1'),
+--        (5, 'user2'),
+--        (6, 'user3');
 
 
 -- 29 rows (PHYS is repeated in classIdentity since it consists of 2 sections)
@@ -180,7 +180,6 @@ VALUES
 -- 30 rows
 INSERT INTO classDescription (name, section, subtitle, description, credits)
 VALUES ('HIST1010', 1, 'World History', 'A survey of the political, social, and cultural developments of Western civilization from the Reformation to the present.', 3),
-('CHEM1060', 1, 'Inorganic Chemistry I','An introduction to the fundamental principles of chemistry, including atomic structure, chemical bonding, stoichiometry, and thermodynamics.', 3),
 ('PHIL2010', 1, 'Fundementals of Philosophy','Introduces a broad spectrum of philosophical problems and approaches. Topics include basic questions concerning morality, skepticism and the foundations of knowledge, the mind and its relation to the body, and the existence of God.', 3),
 ('BIOL1110', 1, 'Introductory Biology', ' This course covers the fundamentals of biology, including the structure and function of cells, genetics, ecology, and evolution.', 3 ),
 ('ENGL2010', 1, 'Intermediate Writing', ' This course builds on basic writing skills and emphasizes argumentative and analytical writing across a variety of disciplines.', 3),
@@ -212,16 +211,16 @@ VALUES ('HIST1010', 1, 'World History', 'A survey of the political, social, and 
 
 
 
--- Insert dummy data into classReview table
-INSERT INTO classReview (reviewID, difficulty, hoursOutside, classID)
-VALUES 
-       (4, 3.5, 3.5, 54053),
-       (5, 2.0, 4.5, 10029),
-       (6, 1.0, 7.0, 70035);
+-- -- Insert dummy data into classReview table
+-- INSERT INTO classReview (reviewID, difficulty, hoursOutside, classID)
+-- VALUES 
+--        (4, 3.5, 3.5, 54053),
+--        (5, 2.0, 4.5, 10029),
+--        (6, 1.0, 7.0, 70035);
 -- Insert dummy data into Professor table
 INSERT INTO Professor (profID, email, prof_name)
 VALUES ('ys3kz', 'ys3kz@virginia.edu', 'Yixie Sun'),
-('sa9w', 'sa9w@example.com', 'Simon Anderson'),
+('sa9w', 'sa9w@virginia.edu.com', 'Simon Anderson'),
 ('mh6g', 'mh6g@virginia.edu', 'Michael Henderson'),
 ('jf5d', 'jf5d@virginia.edu', 'Jennifer Ford'),
 ('bw2t', 'bw2t@virginia.edu', 'Benjamin Wong'),
@@ -245,10 +244,10 @@ VALUES ('ys3kz', 'ys3kz@virginia.edu', 'Yixie Sun'),
 
 
 -- Insert dummy data into professorReview table
-INSERT INTO professorReview (reviewID, leniency, profID)
-VALUES (1, 4.0, 'jb2t'),
-       (2, 2.5, 'eh9s'),
-       (3, 1.0, 'kc4b');
+-- INSERT INTO professorReview (reviewID, leniency, profID)
+-- VALUES (1, 4.0, 'jb2t'),
+--        (2, 2.5, 'eh9s'),
+--        (3, 1.0, 'kc4b');
 
 -- Insert dummy data into Class_Requirement table
 INSERT INTO ClassRequirement (classID, requirement)

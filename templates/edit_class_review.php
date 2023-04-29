@@ -79,11 +79,12 @@
     </nav>
 
     <div class="container">
-        <h2 class="my-4">Write a review for <?= $class_name ?>:</h2>
+        <h2 class="my-4">Edit Review For <?= $class_name ?>:</h2>
         <div class="card p-4">
-            <form action="?command=submit_class_review" method="post">
-                <input type="hidden" name="class_id" value="<?= $_classID ?>">
+            <form action="?command=submit_edited_class_review" method="post">
+                <input type="hidden" name="review_id" value="<?= $reviewID ?>">
                 <div class="form-group mt-3">
+                    <input type="hidden" name="class_id" value="<?= $_classID ?>">
                     <label for="rating">Professor:</label>
                     <div class="thin-card">
                         <input type="hidden" name="professor" value="<?= htmlspecialchars($prof_name) ?>">
@@ -106,7 +107,7 @@
                     <label for="rating">Rating:</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
-                            <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>">
+                            <input type="radio" name="rating" id="rating-<?= $i ?>" value="<?= $i ?>" <?php echo ($i == $rating) ? 'checked' : ''; ?>>
                             <label for="rating-<?= $i ?>">&#9733;</label>
                         <?php endfor; ?>
                     </div>
@@ -116,7 +117,7 @@
                     <label for="difficulty">Difficulty:</label>
                     <div class="rating">
                         <?php for ($i = 5; $i >= 1; $i--) : ?>
-                            <input type="radio" name="difficulty" id="difficulty-<?= $i ?>" value="<?= $i ?>">
+                            <input type="radio" name="difficulty" id="difficulty-<?= $i ?>" value="<?= $i ?>" <?php echo ($i == $difficulty) ? 'checked' : ''; ?>>
                             <label for="difficulty-<?= $i ?>">&#9733;</label>
                         <?php endfor; ?>
                     </div>
@@ -124,12 +125,13 @@
 
                 <div class="form-group mt-3">
                     <label for="hours">Hours Outside of Class per Week:</label>
-                    <input class="form-control" id="hours" name="hours" type="number" min="0" max="15">
+                    <input class="form-control" id="hours" name="hours" type="number" min="0" max="15" value=<?= $hours ?>>
+
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="review">Review:</label>
-                    <textarea class="form-control" name="review" id="review" rows="5"></textarea>
+                    <textarea class="form-control" name="review" id="review" rows="5"><?= $review_description ?></textarea>
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Submit</button>
             </form>

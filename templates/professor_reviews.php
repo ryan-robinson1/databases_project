@@ -24,7 +24,7 @@
           if (isset($_SESSION["loggedin_username"])) {
           ?>
             <form action="?command=my_reviews" method="post">
-              <button class="btn" type="submit" id="userBtn"><?php echo $_SESSION["loggedin_username"]; ?></button>
+              <button class="btn" type="submit" id="userBtn">My Reviews</button>
             </form>
           <?php
           } else {
@@ -47,6 +47,11 @@
         <h1><?= $professor ?> </h1>
         <i><?= $email ?></i>
         <hr>
+        <?php if ($has_review) : ?>
+          <b>Rating:</b> <?= $avg_rating ?>/5.0<br>
+          <b>Leniency: </b> <?= $avg_len ?>/5.0 <br>
+        <?php endif; ?>
+
         <b>Classes Taught: </b> <?= $comma_separated_classes ?>
         <hr>
         <form action="?command=add_prof_review" method="post">
@@ -98,9 +103,6 @@
       </div>
     </div>
   </div>
-
-
-
 </body>
 
 </html>

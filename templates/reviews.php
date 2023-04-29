@@ -51,9 +51,14 @@
         <h1><?= $name ?>: <?= $subtitle ?></h1>
         <i><?= $description ?></i>
         <hr>
-        <b>Department:</b> <?= $department ?> <br>
+        <?php if ($has_review) : ?>
+          <b>Rating:</b> <?= $avg_rating ?>/5.0<br>
+          <b>Difficulty: </b> <?= $avg_difficulty ?>/5.0 <br>
+          <b>Hours per Week: </b> <?= $avg_hours ?><br>
+        <?php endif; ?>
+
+        <hr>
         <b>Credits: </b> <?= $credits ?> <br>
-        <b>Taught By:</b> <?= $professor ?> <br>
         <b>Professor Email:</b> <?= $email ?> <br>
         <?php if (isset($requirement)) : ?>
           <b>Prerequisite: </b><?= $requirement ?>

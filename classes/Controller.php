@@ -8,7 +8,7 @@ class Controller
     {
         $this->command = $command;
         $servername = "localhost";
-        $username = "root";
+        $username = "student";
         $password = "";
         //Name of database in phpmyadmin
         $dbname = "cs4750project";
@@ -67,10 +67,141 @@ class Controller
             case "submit_prof_review":
                 $this->submit_prof_review();
                 break;
+            case "edit_prof_review":
+                $this->edit_prof_review();
+                break;
+            case "submit_edited_prof_review":
+                $this->submit_edited_prof_review();
+                break;
+            case "edit_class_review":
+                $this->edit_class_review();
+                break;
+            case "submit_edited_class_review":
+                $this->submit_edited_class_review();
+                break;
+            case "delete_class_review":
+                $this->delete_class_review();
+                break;
+            case "delete_prof_review":
+                $this->delete_class_review();
+                break;
             default:
                 $this->home();
                 break;
         }
+    }
+    public function edit_class_review()
+    {
+        $reviewID = $_POST['reviewID'];
+        $sql = "SELECT name, classID FROM classidentity NATURAL JOIN classreview WHERE reviewID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 'i', $reviewID);
+
+        $class_name = $arr[0]['name'];
+        $_classID = $arr[0]['classID'];
+
+        $sql = "SELECT reviewdescription, rating, difficulty, hoursOutside FROM review NATURAL JOIN classreview WHERE reviewID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $reviewID);
+        $review_description = $arr[0]['reviewdescription'];
+        $rating = $arr[0]['rating'];
+        $difficulty = $arr[0]['difficulty'];
+        $hours = $arr[0]['hoursOutside'];
+
+        $sql = "SELECT prof_name FROM taughtby NATURAL JOIN professor WHERE classID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+        $prof_name = $arr[0]['prof_name'];
+
+        include "templates/edit_class_review.php";
+    }
+    public function submit_edited_class_review()
+    {
+        $professor = $_POST['professor'];
+        $semester = $_POST['semester'];
+        $rating = $_POST['rating'];
+        $difficulty = $_POST['difficulty'];
+        $hours = $_POST['hours'];
+        $review = $_POST['review'];
+        $class_id = $_POST['class_id'];
+        $review_id = $_POST['review_id'];
+
+        $sql = "UPDATE review SET rating = ?, reviewDescription = ?, reviewTerm = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'issi', $rating, $review, $semester, $review_id);
+
+        $sql = "UPDATE classreview SET difficulty = ?, hoursOutside = ?, classID = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'iiii', $difficulty, $hours, $class_id, $review_id);
+
+        $sql = "UPDATE writtenbyuser SET computingID = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'si', $_SESSION["loggedin_username"], $review_id);
+
+
+
+        $this->my_reviews();
+    }
+    public function delete_class_review()
+    {
+        $review_id = $_POST['reviewID'];
+        $sql = "DELETE FROM review WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $sql = "DELETE FROM classreview WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $sql = "DELETE FROM writtenbyuser WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $this->my_reviews();
+    }
+    public function edit_prof_review()
+    {
+
+        $reviewID = $_POST['reviewID'];
+        $sql = "SELECT prof_name, profID FROM professor NATURAL JOIN professorreview WHERE reviewID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 'i', $reviewID);
+
+        $prof_name = $arr[0]['prof_name'];
+        $profID = $arr[0]['profID'];
+
+        $sql = "SELECT reviewdescription, rating, leniency FROM review NATURAL JOIN professorreview WHERE reviewID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $reviewID);
+        $review_description = $arr[0]['reviewdescription'];
+        $rating = $arr[0]['rating'];
+        $leniency = $arr[0]['leniency'];
+
+
+        include "templates/edit_prof_review.php";
+    }
+    public function submit_edited_prof_review()
+    {
+        $semester = $_POST['semester'];
+        $rating = $_POST['rating'];
+        $leniency = $_POST['leniency'];
+        $review = $_POST['review'];
+        $prof_id = $_POST['prof_id'];
+        $review_id = $_POST['review_id'];
+
+        $sql = "UPDATE review SET rating = ?, reviewDescription = ?, reviewTerm = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'issi', $rating, $review, $semester, $review_id);
+
+        $sql = "UPDATE professorreview SET leniency = ?, profID = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'isi', $leniency, $prof_id, $review_id);
+
+        $sql = "UPDATE writtenbyuser SET computingID = ? WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'si', $_SESSION["loggedin_username"], $review_id);
+
+        $this->my_reviews();
+    }
+    public function delete_prof_review()
+    {
+        $review_id = $_POST['reviewID'];
+        $sql = "DELETE FROM review WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $sql = "DELETE FROM professorreview WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $sql = "DELETE FROM writtenbyuser WHERE reviewID = ?";
+        $this->runSafeSQL($this->conn, $sql, 'i', $review_id);
+
+        $this->my_reviews();
     }
     public function submit_class_review()
     {
@@ -221,6 +352,23 @@ class Controller
         $professor = $arr[0]['prof_name'];
         $email = $arr[0]['email'];
 
+        $has_review = false;
+
+        $sql = "SELECT AVG(rating) as avg_rating, AVG(leniency) as avg_len
+        FROM review 
+        NATURAL JOIN professorreview 
+        WHERE profID=? 
+        GROUP BY profID";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
+
+        $avg_rating = 0;
+        $avg_len = 0;
+        if (count($arr) > 0) {
+            $avg_rating = round($arr[0]['avg_rating'], 1);
+            $avg_len = round($arr[0]['avg_len'], 1);
+            $has_review = true;
+        }
+
 
         $sql = "SELECT name FROM classidentity NATURAL JOIN taughtby NATURAL JOIN professor WHERE profID=?";
         $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
@@ -305,8 +453,27 @@ class Controller
         $requirement = $arr[0]['requirement'];
         $email = $arr[0]['email'];
 
+        $has_review = false;
+        $sql = "SELECT AVG(rating) as avg_rating, AVG(difficulty) as avg_diff, AVG(hoursOutside) as avg_hours
+        FROM review 
+        NATURAL JOIN classreview 
+        WHERE classID=? 
+        GROUP BY classID";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+
+        if (count($arr) > 0) {
+            $avg_rating = round($arr[0]['avg_rating'], 1);
+            $avg_difficulty = round($arr[0]['avg_diff'], 1);
+            $avg_hours = round($arr[0]['avg_hours'], 1);
+            $has_review = true;
+        }
+
+
+
         $sql = "SELECT * FROM classreview NATURAL JOIN review WHERE classID=?";
         $arr = $this->runSafeSQL($this->conn, $sql, 's', $_classID);
+
+
 
 
         $difficulty = [];
@@ -339,6 +506,7 @@ class Controller
         $class_reviewTerm = [];
         $class_reviewDate = [];
         $class_name = [];
+        $class_reviewID = [];
         foreach ($arr as $row) {
             $class_difficulty[] = $row['difficulty'];
             $class_hoursOutside[] = $row['hoursOutside'];
@@ -347,6 +515,7 @@ class Controller
             $class_reviewTerm[] = $row['reviewTerm'];
             $class_reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
             $class_name[] = $row['name'];
+            $class_reviewID = $row['reviewID'];
         }
 
         $sql = "SELECT * FROM professorreview NATURAL JOIN review NATURAL JOIN writtenbyuser NATURAL JOIN professor WHERE computingID=?";
@@ -357,6 +526,7 @@ class Controller
         $prof_reviewTerm = [];
         $prof_reviewDate = [];
         $prof_name = [];
+        $prof_reviewID = [];
 
         foreach ($arr as $row) {
             $prof_leniency[] = $row['leniency'];
@@ -365,6 +535,7 @@ class Controller
             $prof_reviewTerm[] = $row['reviewTerm'];
             $prof_reviewDate[] = date("F d Y", strtotime($row['reviewDate']));
             $prof_name[] = $row['prof_name'];
+            $prof_reviewID = $row['reviewID'];
         }
 
 
