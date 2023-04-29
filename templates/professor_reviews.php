@@ -50,8 +50,8 @@
         <hr>
         <b>Classes Taught: </b> <?= $comma_separated_classes ?>
         <hr>
-        <form action="?command=add_review" method="post">
-          <input type="hidden" name="classid" value='<?= $_classID ?>'>
+        <form action="?command=add_prof_review" method="post">
+          <input type="hidden" name="profid" value='<?= $_profID ?>'>
           <?php if (isset($_SESSION["loggedin_username"])) : ?>
             <button type="submit" class="btn btn-success mt-3" style="margin-bottom:10px">+Add Review</button>
           <?php else : ?>

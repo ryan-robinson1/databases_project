@@ -64,6 +64,9 @@ class Controller
             case "add_prof_review":
                 $this->add_prof_review();
                 break;
+            case "submit_prof_review":
+                $this->submit_prof_review();
+                break;
             default:
                 $this->home();
                 break;
@@ -94,6 +97,35 @@ class Controller
 
         $sql = "INSERT INTO classreview (reviewID, difficulty, hoursOutside, classID) VALUES (?, ?, ?, ?)";
         $this->runSafeSQL($this->conn, $sql, 'iiii', $review_id, $difficulty, $hours, $class_id);
+
+        $sql = "INSERT INTO writtenbyuser (reviewID, computingID) VALUES (?, ?)";
+        $this->runSafeSQL($this->conn, $sql, 'is', $review_id,  $_SESSION["loggedin_username"]);
+
+        include "templates/home.php";
+    }
+    public function submit_prof_review()
+    {
+        $semester = $_POST['semester'];
+        $rating = $_POST['rating'];
+        $leniency = $_POST['leniency'];
+        $review = $_POST['review'];
+        $prof_id = $_POST['prof_id'];
+
+
+        $sql = "SELECT * FROM professorreview NATURAL JOIN writtenbyuser WHERE computingID=? AND profID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 'si', $_SESSION["loggedin_username"],  $prof_id);
+
+        if (count($arr) > 0) {
+            $_SESSION['error'] = "<div class='alert alert-danger'>Error: Can't review the same professor twice! </div>";
+            $this->home();
+            exit();
+        }
+
+        $sql = "INSERT INTO review (rating, reviewDescription, reviewTerm) VALUES (?, ?, ?)";
+        $review_id = $this->runSafeSQL($this->conn, $sql, 'iss', $rating, $review, $semester);
+
+        $sql = "INSERT INTO professorreview (reviewID, leniency, profID) VALUES (?, ?, ?)";
+        $this->runSafeSQL($this->conn, $sql, 'iis', $review_id, $leniency, $prof_id);
 
         $sql = "INSERT INTO writtenbyuser (reviewID, computingID) VALUES (?, ?)";
         $this->runSafeSQL($this->conn, $sql, 'is', $review_id,  $_SESSION["loggedin_username"]);
@@ -173,6 +205,10 @@ class Controller
     public function add_prof_review()
     {
         $_profID = $_POST['profid'];
+        $sql = "SELECT prof_name FROM professor WHERE profID=?";
+        $arr = $this->runSafeSQL($this->conn, $sql, 's', $_profID);
+        $prof_name = $arr[0]['prof_name'];
+
 
         include "templates/add_prof_review.php";
     }

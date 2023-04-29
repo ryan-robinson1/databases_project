@@ -79,18 +79,13 @@
     </nav>
 
     <div class="container">
-        <h2 class="my-4">Write a review for <?= $class_name ?>:</h2>
+        <h2 class="my-4">Write a review for <?= $prof_name ?>:</h2>
         <div class="card p-4">
-            <form>
-                <div class="form-group mt-3">
-                    <label for="rating">Professor:</label>
-                    <div class="thin-card">
-                        <?= htmlspecialchars($prof_name) ?>
-                    </div>
-                </div>
+            <form action="?command=submit_prof_review" method="post">
+                <input type="hidden" name="prof_id" value="<?= $_profID ?>">
                 <div class="form-group">
                     <label for="semester">Semester:</label>
-                    <select class="form-control" id="semester">
+                    <select class="form-control" id="semester" name="semester">
                         <option>Spring 2023</option>
                         <option>Fall 2022</option>
                         <option>Spring 2022</option>
@@ -110,12 +105,19 @@
                     </div>
                 </div>
 
-
-
+                <div class="form-group mt-3">
+                    <label for="difficulty">Leniency:</label>
+                    <div class="rating">
+                        <?php for ($i = 5; $i >= 1; $i--) : ?>
+                            <input type="radio" name="leniency" id="leniency-<?= $i ?>" value="<?= $i ?>">
+                            <label for="leniency-<?= $i ?>">&#9733;</label>
+                        <?php endfor; ?>
+                    </div>
+                </div>
 
                 <div class="form-group mt-3">
                     <label for="review">Review:</label>
-                    <textarea class="form-control" id="review" rows="5"></textarea>
+                    <textarea class="form-control" name="review" id="review" rows="5"></textarea>
                 </div>
                 <button type="submit" class="btn btn-success mt-3">Submit</button>
             </form>
