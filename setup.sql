@@ -6,7 +6,6 @@ CREATE TABLE TheUser (
   UNIQUE (email)
 );
 
-
 CREATE TABLE Professor (
   profID VARCHAR(50)  PRIMARY KEY,
   email VARCHAR(50) NOT NULL,
@@ -19,8 +18,6 @@ CREATE TABLE writtenByUser (
   computingID VARCHAR(50) NOT NULL,
   FOREIGN KEY (computingID) REFERENCES TheUser(computingID)
 );
-
-
 
 CREATE TABLE taughtBy (
   classID INT PRIMARY KEY,
@@ -174,8 +171,9 @@ VALUES
   (13620, 1, 'ARTH2010'),
   (15722, 1, 'STAT1010'),
   (13027, 1, 'PHYS2010'),
-(13028, 2, 'PHYS2010'),
+  (13028, 2, 'PHYS2010'),
   (11223, 1, 'SOC2010');
+
 
 -- 30 rows
 INSERT INTO classDescription (name, section, subtitle, description, credits)
@@ -208,7 +206,6 @@ VALUES ('HIST1010', 1, 'World History', 'A survey of the political, social, and 
 ('PHYS2010', 1, 'General Physics I', ' Principles of classical mechanics and thermodynamics, with application of mathematical tools and physical laws to solve problems related to motion, forces, energy, and heat.', 3),
 ('PHYS2010', 2, 'General Physics I','Principles of classical mechanics and thermodynamics, with application of mathematical tools and physical laws to solve problems related to motion, forces, energy, and heat.', 3),
 ('SOC2010', 1, 'Introduction to Sociology', 'Overview of sociological perspective and major theoretical approaches used to study society, including analysis of social structures, institutions, and processes, and critical evaluation of social issues and inequalities.', 3);
-
 
 
 -- -- Insert dummy data into classReview table
@@ -249,6 +246,7 @@ VALUES ('ys3kz', 'ys3kz@virginia.edu', 'Yixie Sun'),
 --        (2, 2.5, 'eh9s'),
 --        (3, 1.0, 'kc4b');
 
+
 -- Insert dummy data into Class_Requirement table
 INSERT INTO ClassRequirement (classID, requirement)
 VALUES (11223, 'SOC1600'),
@@ -257,6 +255,7 @@ VALUES (11223, 'SOC1600'),
 (10430, 'PSYCH1000'),
 (10016, 'MUSC1000'),
 (19265, 'ARTH1000');
+
 
 -- Insert dummy data into taughtBy table (30 rows)
 INSERT INTO taughtBy (classID, profID)
@@ -288,5 +287,6 @@ VALUES  (65001,'ys3kz'),
   (13620,  'gm6h'),
   (15722,  'bw2t'),
   (13027, 'sa9w'),
-(13028, 'kl9m'),
+  (13028, 'kl9m'),
   (11223, 'cn2v');
+
