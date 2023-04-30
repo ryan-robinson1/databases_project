@@ -81,6 +81,47 @@ CREATE TABLE professorReview (
   FOREIGN KEY (profID) REFERENCES Professor(profID)
 );
 
+CREATE TABLE ReviewLogs (
+  reviewID INT,
+  time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  action ENUM('Insert', 'Update', 'Delete'),
+  PRIMARY KEY (reviewID, time)
+  -- FOREIGN KEY (reviewID) REFERENCES Review(reviewID)
+);
+
+DELIMITER $$
+CREATE TRIGGER log_review_insert
+AFTER INSERT ON Review
+FOR EACH ROW
+BEGIN
+  INSERT INTO ReviewLogs (reviewID, time, action)
+  VALUES (NEW.reviewID, NEW.reviewDate, 'Insert');
+END;
+$$
+DELIMITER;
+
+DELIMITER $$
+CREATE TRIGGER log_review_update
+AFTER UPDATE ON Review
+FOR EACH ROW
+BEGIN
+  INSERT INTO ReviewLogs (reviewID, time, action)
+  VALUES (NEW.reviewID, NOW(), 'Update');
+END;
+$$
+DELIMITER;
+
+DELIMITER $$
+CREATE TRIGGER log_review_delete
+BEFORE DELETE ON Review
+FOR EACH ROW
+BEGIN
+  INSERT INTO ReviewLogs (reviewID, time, action)
+  VALUES (OLD.reviewID, NOW(), 'Delete');
+END;
+$$
+DELIMITER;
+
 
 -- Insert dummy data into User table
 -- INSERT INTO TheUser (computingID, name, email, profilePicLink)
