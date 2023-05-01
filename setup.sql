@@ -89,63 +89,44 @@ CREATE TABLE ReviewLogs (
   -- FOREIGN KEY (reviewID) REFERENCES Review(reviewID)
 );
 
+
 DELIMITER $$
+
 CREATE TRIGGER log_review_insert
 AFTER INSERT ON Review
 FOR EACH ROW
 BEGIN
   INSERT INTO ReviewLogs (reviewID, time, action)
   VALUES (NEW.reviewID, NEW.reviewDate, 'Insert');
-END;
-$$
-DELIMITER;
+END $$
+
+DELIMITER ;
 
 DELIMITER $$
+
 CREATE TRIGGER log_review_update
 AFTER UPDATE ON Review
 FOR EACH ROW
 BEGIN
   INSERT INTO ReviewLogs (reviewID, time, action)
   VALUES (NEW.reviewID, NOW(), 'Update');
-END;
-$$
-DELIMITER;
+END $$
+
+DELIMITER ;
 
 DELIMITER $$
+
 CREATE TRIGGER log_review_delete
 BEFORE DELETE ON Review
 FOR EACH ROW
 BEGIN
   INSERT INTO ReviewLogs (reviewID, time, action)
   VALUES (OLD.reviewID, NOW(), 'Delete');
-END;
-$$
-DELIMITER;
+END $$
+
+DELIMITER ;
 
 
--- Insert dummy data into User table
--- INSERT INTO TheUser (computingID, name, email, profilePicLink)
--- VALUES ('user1', 'John Smith', 'john.smith@example.com', 'http://example.com/profilepic/user1'),
---        ('user2', 'Jane Doe', 'jane.doe@example.com', 'http://example.com/profilepic/user2'),
---        ('user3', 'David Lee', 'david.lee@example.com', 'http://example.com/profilepic/user3');
-
--- Insert dummy data into Review table
--- INSERT INTO Review (reviewID, rating, reviewDescription, reviewTerm, reviewDate)
--- VALUES (1, 4.5, 'Great prof, highly recommend!', 'Spring 2023','2022-01-01'),
---        (2, 3.0, 'Not bad, but could be better', 'Spring 2021','2022-01-02'),
---        (3, 2.5, 'Would not recommend this prof', 'Fall 2022','2022-01-03'),
---        (4, 4.0, 'Interesting class, learned a lot', 'Spring 2021','2022-01-04'),
---        (5, 3.5, 'Decent class, nothing special','Spring 2020', '2022-01-05'),
---        (6, 2.0, 'Terrible class, avoid if possible', 'Fall 2019','2022-01-06');
-
--- Insert dummy data into writtenByUser table
--- INSERT INTO writtenByUser (reviewID, computingID)
--- VALUES (1, 'user1'),
---        (2, 'user2'),
---        (3, 'user3'),
--- (4, 'user1'),
---        (5, 'user2'),
---        (6, 'user3');
 
 
 -- 29 rows (PHYS is repeated in classIdentity since it consists of 2 sections)
